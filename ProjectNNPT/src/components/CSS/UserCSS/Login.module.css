@@ -1,0 +1,102 @@
+.loginPage {
+    background: url('../../../assets/images/register.jpg') no-repeat center center fixed;
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
+  
+  .loginForm {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    width: 360px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .loginTitle {
+    color: #6e6a5c;
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .loginInput {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    row-gap: 20px;
+  }
+  
+  .inputGroup {
+    position: relative;
+  }
+  
+  .loginInput input {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-bottom: 2px solid #b9b3a1;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  
+  .loginInput input:focus {
+    border-bottom: 2px solid #8c8675;
+    box-shadow: 0 4px 8px rgba(185, 179, 161, 0.3);
+  }
+  
+  .loginInput input::placeholder {
+    color: #918b7a;
+  }
+  
+  .loginButton {
+    background: linear-gradient(135deg, #b9b3a1 0%, #d6d1c0 100%);
+    color: #555048;
+    border: none;
+    padding: 15px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+  
+  .loginButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(185, 179, 161, 0.5);
+  }
+  
+  .loginText {
+    margin-top: 20px;
+    color: #6e6a5c;
+    font-size: 14px;
+  }
+  
+  .loginText Link {
+    color: #8c8675;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  
+  .loginText Link:hover {
+    color: #6e6a5c;
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 480px) {
+    .loginForm {
+      width: 85%;
+      padding: 25px;
+    }
+  }

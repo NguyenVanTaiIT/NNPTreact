@@ -1,0 +1,133 @@
+.formOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .formContainer {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formContainer h3 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    color: #34495e;
+    font-weight: 500;
+  }
+  
+  .formGroup input[type="text"],
+  .formGroup input[type="number"],
+  .formGroup select,
+  .formGroup textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .formGroup input[type="text"]:focus,
+  .formGroup input[type="number"]:focus,
+  .formGroup select:focus,
+  .formGroup textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+  
+  .formGroup textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  
+  .checkboxLabel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .error {
+    border-color: #e74c3c !important;
+  }
+  
+  .errorText {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+  }
+  
+  .formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+  }
+  
+  /* Scrollbar styles */
+  .formContainer::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .formContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .formContainer::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 4px;
+  }
+  
+  .formContainer::-webkit-scrollbar-thumb:hover {
+    background: #95a5a6;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .formContainer {
+      margin: 20px;
+      padding: 20px;
+    }
+    
+    .formActions {
+      flex-direction: column-reverse;
+    }
+    
+    .formActions button {
+      width: 100%;
+    }
+  }

@@ -1,0 +1,47 @@
+.roomsContainer {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 60px);
+}
+
+.roomsContainer h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Add animation for form transitions */
+.formEnter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.formEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.formExit {
+  opacity: 1;
+}
+
+.formExitActive {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .roomsContainer {
+    padding: 15px;
+  }
+}
+
+/* Grid layout for larger screens */
+@media (min-width: 1024px) {
+  .roomsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+} 
