@@ -50,28 +50,68 @@ export const login = async (credentials) => {
     localStorage.setItem('user', JSON.stringify(user));
     
     // Kiểm tra và lưu vai trò người dùng
-    if (user.role && user.role.roleName) {
-      // Nếu role là object có roleName
-      localStorage.setItem('userRole', user.role.roleName);
-    } else if (user.role && typeof user.role === 'string') {
-      // Nếu role là ID, lưu ID
-      localStorage.setItem('userRole', user.role);
-      
-      // Có thể fetch role details ở đây nếu cần
-      try {
-        const roleResponse = await api.get(`/roles/${user.role}`);
-        if (roleResponse.data && roleResponse.data.roleName) {
-          // Cập nhật userRole với tên role
-          localStorage.setItem('userRole', roleResponse.data.roleName);
+    if (user && user.role) {
+      if (typeof user.role === 'object' && user.role.roleName) {
+        // Nếu role là object có roleName
+        localStorage.setItem('userRole', user.role.roleName.toLowerCase());
+      } else if (typeof user.role === 'string') {
+        // Nếu role là ID, lấy thông tin role
+        try {
+          // Log để debug
+          console.log('Fetching role details for ID:', user.role);
+          
+          const roleResponse = await api.get(`/roles/${user.role}`);
+          console.log('Role response:', roleResponse.data);
+          
+          // Kiểm tra cấu trúc dữ liệu trả về
+          if (roleResponse.data && roleResponse.data.success && roleResponse.data.data) {
+            const roleData = roleResponse.data.data;
+            if (roleData.roleName) {
+              // Cập nhật userRole với tên role
+              localStorage.setItem('userRole', roleData.roleName.toLowerCase());
+            } else {
+              console.log('Role data is missing roleName:', roleData);
+              localStorage.setItem('userRole', 'user');
+            }
+          } else {
+            console.log('Unexpected role response structure:', roleResponse.data);
+            localStorage.setItem('userRole', 'user');
+          }
+        } catch (err) {
+          console.error('Error fetching role details:', err);
+          // Thử lấy thông tin vai trò trực tiếp từ API
+          try {
+            const directResponse = await api.get(`/users/${user.id}/role`);
+            console.log('Direct role response:', directResponse.data);
+            
+            // Kiểm tra cấu trúc dữ liệu trả về
+            if (directResponse.data && directResponse.data.success && directResponse.data.data) {
+              const roleData = directResponse.data.data;
+              if (roleData.roleName) {
+                localStorage.setItem('userRole', roleData.roleName.toLowerCase());
+              } else {
+                localStorage.setItem('userRole', 'user');
+              }
+            } else {
+              localStorage.setItem('userRole', 'user');
+            }
+          } catch (directErr) {
+            console.error('Error fetching direct role:', directErr);
+            localStorage.setItem('userRole', 'user');
+          }
         }
-      } catch (err) {
-        console.error('Error fetching role details:', err);
-        // Vẫn giữ nguyên userRole là ID
+      } else {
+        // Nếu role không phải object hoặc string
+        localStorage.setItem('userRole', 'user');
       }
     } else {
       // Mặc định là user nếu không có thông tin vai trò
       localStorage.setItem('userRole', 'user');
     }
+    
+    // Log để debug
+    console.log('User role after login:', localStorage.getItem('userRole'));
+    console.log('User data after login:', user);
     
     return { user };
   } catch (error) {

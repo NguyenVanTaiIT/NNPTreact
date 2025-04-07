@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/rooms';
+import axiosInstance, { API_ENDPOINTS, handleApiError } from './api';
 
 /**
  * Lấy danh sách tất cả các phòng
@@ -8,16 +6,20 @@ const API_URL = 'http://localhost:3000/rooms';
  */
 export const getAllRooms = async () => {
     try {
-        const response = await axios.get(API_URL);
+        const response = await axiosInstance.get(API_ENDPOINTS.ROOMS);
         console.log('API Response:', response.data);
-        // Kiểm tra cấu trúc response
+        
         if (response.data && response.data.success) {
             return response.data.data || [];
+        } else if (Array.isArray(response.data)) {
+            return response.data;
         }
-        return [];
+        
+        console.error('Unexpected API response structure:', response.data);
+        throw new Error('Invalid response format');
     } catch (error) {
         console.error('Error in getAllRooms:', error);
-        return [];
+        throw handleApiError(error);
     }
 };
 
@@ -34,10 +36,7 @@ export const getRoomStats = async () => {
         // Kiểm tra xem rooms có phải là mảng không
         if (!Array.isArray(rooms)) {
             console.error('Rooms is not an array:', rooms);
-            return {
-                totalRooms: 0,
-                availableRooms: 0
-            };
+            throw new Error('Invalid rooms data format');
         }
         
         // Tính toán thống kê
@@ -52,19 +51,41 @@ export const getRoomStats = async () => {
         };
     } catch (error) {
         console.error('Error in getRoomStats:', error);
-        return {
-            totalRooms: 0,
-            availableRooms: 0
-        };
+        throw handleApiError(error);
     }
 };
 
+/**
+ * Lấy thông tin chi tiết của một phòng
+ * @param {string} id - ID của phòng
+ * @returns {Promise<Object>} - Thông tin chi tiết phòng
+ */
 export const getRoomById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/rooms/${id}`);
-    return response.data;
+    const response = await axiosInstance.get(`${API_ENDPOINTS.ROOMS}/${id}`);
+    
+    // Kiểm tra cấu trúc response
+    if (response.data && response.data.success) {
+      return response.data.data;
+    } else if (response.data) {
+      return response.data;
+    }
+    
+    throw new Error('Invalid response format');
   } catch (error) {
     console.error('Error fetching room details:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
+
+const fetchRooms = async () => {
+    try {
+        const rooms = await getAllRooms();
+        console.log('Fetched Rooms:', rooms);
+    } catch (error) {
+        console.error('Error fetching rooms:', error);
+    }
+};
+
+// Call the function to fetch rooms
+fetchRooms();

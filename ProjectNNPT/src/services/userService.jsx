@@ -1,8 +1,4 @@
-import axios from 'axios';
-import axiosInstance from '../config/axios';
-import { API_ENDPOINTS, handleApiError } from '../config/api';
-
-const API_URL = 'http://localhost:3000/users';
+import axiosInstance, { API_ENDPOINTS, handleApiError } from './api';
 
 /**
  * Đăng nhập người dùng
@@ -11,10 +7,10 @@ const API_URL = 'http://localhost:3000/users';
  */
 export const login = async (credentials) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
+    const response = await axiosInstance.post(`${API_ENDPOINTS.AUTH}/login`, credentials);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Đăng nhập thất bại' };
+    throw handleApiError(error);
   }
 };
 
@@ -25,10 +21,10 @@ export const login = async (credentials) => {
  */
 export const register = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    const response = await axiosInstance.post(`${API_ENDPOINTS.AUTH}/register`, userData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Đăng ký thất bại' };
+    throw handleApiError(error);
   }
 };
 
@@ -39,11 +35,20 @@ export const register = async (userData) => {
 export const getAllUsers = async () => {
   try {
     const response = await axiosInstance.get(API_ENDPOINTS.USERS);
-    // Đảm bảo trả về một mảng
-    return Array.isArray(response.data) ? response.data : [];
+    console.log('Users API Response:', response.data);
+    
+    // Kiểm tra cấu trúc response
+    if (response.data && response.data.success) {
+      return response.data.data || [];
+    } else if (Array.isArray(response.data)) {
+      // Nếu response.data là mảng trực tiếp
+      return response.data;
+    }
+    
+    console.error('Unexpected API response structure:', response.data);
+    return [];
   } catch (error) {
     console.error('Error in getAllUsers:', error);
-    // Trả về mảng rỗng khi có lỗi
     return [];
   }
 };
@@ -138,29 +143,38 @@ export const updatePassword = async (passwordData) => {
  */
 export const getUserStats = async () => {
   try {
-    // Lấy tất cả người dùng và tính toán thống kê
     const users = await getAllUsers();
     
-    // Kiểm tra xem users có phải là mảng không
     if (!Array.isArray(users)) {
       console.error('Users is not an array:', users);
       return {
-        totalUsers: 0
+        totalUsers: 0,
+        activeUsers: 0,
+        adminUsers: 0
       };
     }
     
     // Tính toán thống kê
     const totalUsers = users.length;
+    const activeUsers = users.filter(user => user.status === 'active').length;
+    const adminUsers = users.filter(user => {
+      if (typeof user.role === 'object') {
+        return user.role?.roleName?.toLowerCase() === 'admin';
+      }
+      return false;
+    }).length;
     
     return {
-      totalUsers
+      totalUsers,
+      activeUsers,
+      adminUsers
     };
   } catch (error) {
     console.error('Error in getUserStats:', error);
-    
-    // Trả về dữ liệu mẫu khi không thể lấy dữ liệu từ API
     return {
-      totalUsers: 0
+      totalUsers: 0,
+      activeUsers: 0,
+      adminUsers: 0
     };
   }
 };

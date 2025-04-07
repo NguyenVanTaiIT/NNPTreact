@@ -17,6 +17,8 @@ const Dashboard = ({ title = 'Dashboard' }) => {
         setLoading(true);
         setError(null);
         
+        console.log('Fetching dashboard stats...');
+        
         // Lấy thống kê từ database
         const [roomStats, userStats] = await Promise.all([
           getRoomStats(),

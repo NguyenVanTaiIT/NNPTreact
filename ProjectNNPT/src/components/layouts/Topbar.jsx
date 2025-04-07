@@ -4,6 +4,7 @@ import styles from './Topbar.module.css';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../config/routes.config';
+import profileImage from '../../assets/images/profile-user.png';
 
 const Topbar = () => {
   const { user } = useAuth();
@@ -38,11 +39,11 @@ const Topbar = () => {
       </div>
       <div className={styles.user}>
         <div className={styles.userInfo}>
-          <span className={styles.userName}>{user?.name || 'User'}</span>
+          <span className={styles.userName}>Admin</span>
           <span className={styles.userRole}>{getRoleName(user?.role)}</span>
         </div>
         <div className={styles.avatar}>
-          {getUserInitials(user?.name || 'User')}
+          <img src={profileImage} alt="Admin Profile" />
         </div>
       </div>
     </div>

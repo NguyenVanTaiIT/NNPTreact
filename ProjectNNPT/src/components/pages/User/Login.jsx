@@ -20,33 +20,30 @@ function Login() {
 
     try {
       const response = await login({ username, password });
-      // Kiểm tra vai trò người dùng và điều hướng phù hợp
       const user = response.user;
       
       // Kiểm tra vai trò admin
       let isAdmin = false;
       
-      if (user.role) {
-        if (user.role === 'Admin' || user.role === 'admin') {
-          isAdmin = true;
-        } else if (typeof user.role === 'object' && user.role.roleName === 'Admin') {
-          isAdmin = true;
+      if (user && user.role) {
+        if (typeof user.role === 'object' && user.role.roleName) {
+          isAdmin = user.role.roleName.toLowerCase() === 'admin';
         } else if (typeof user.role === 'string') {
-          // Nếu role là ID, lấy thông tin role
           try {
             const roleDetails = await getRoleById(user.role);
-            isAdmin = roleDetails.roleName === 'Admin';
+            if (roleDetails?.data?.roleName) {
+              isAdmin = roleDetails.data.roleName.toLowerCase() === 'admin';
+            }
           } catch (err) {
             console.error('Error fetching role details:', err);
-            isAdmin = false;
           }
         }
       }
       
       if (isAdmin) {
-        navigate('/admin'); // Điều hướng admin đến trang admin
+        navigate('/admin');
       } else {
-        navigate('/'); // Điều hướng người dùng thường về trang chủ
+        navigate('/');
       }
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại');

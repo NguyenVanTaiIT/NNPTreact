@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/roles';
+import api from './api';
 
 /**
  * Lấy danh sách tất cả các vai trò
@@ -8,8 +6,11 @@ const API_URL = 'http://localhost:3000/roles';
  */
 export const getAllRoles = async () => {
     try {
-        const response = await axios.get(API_URL);
-        return response.data;
+        const response = await api.get('/roles');
+        if (response.data && response.data.success && response.data.data) {
+            return response.data.data;
+        }
+        return [];
     } catch (error) {
         throw error.response?.data || { message: 'Không thể lấy danh sách vai trò' };
     }
@@ -22,7 +23,7 @@ export const getAllRoles = async () => {
  */
 export const getRoleById = async (roleId) => {
     try {
-        const response = await axios.get(`${API_URL}/${roleId}`);
+        const response = await api.get(`/roles/${roleId}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể lấy thông tin vai trò' };
@@ -36,8 +37,11 @@ export const getRoleById = async (roleId) => {
  */
 export const createRole = async (roleData) => {
     try {
-        const response = await axios.post(API_URL, roleData);
-        return response.data;
+        const response = await api.post('/roles', roleData);
+        if (response.data && response.data.success && response.data.data) {
+            return response.data.data;
+        }
+        return null;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể tạo vai trò mới' };
     }
@@ -51,8 +55,11 @@ export const createRole = async (roleData) => {
  */
 export const updateRole = async (roleId, roleData) => {
     try {
-        const response = await axios.put(`${API_URL}/${roleId}`, roleData);
-        return response.data;
+        const response = await api.put(`/roles/${roleId}`, roleData);
+        if (response.data && response.data.success && response.data.data) {
+            return response.data.data;
+        }
+        return null;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể cập nhật vai trò' };
     }
@@ -65,8 +72,11 @@ export const updateRole = async (roleId, roleData) => {
  */
 export const deleteRole = async (roleId) => {
     try {
-        const response = await axios.delete(`${API_URL}/${roleId}`);
-        return response.data;
+        const response = await api.delete(`/roles/${roleId}`);
+        if (response.data && response.data.success) {
+            return response.data;
+        }
+        return null;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể xóa vai trò' };
     }
@@ -80,8 +90,11 @@ export const deleteRole = async (roleId) => {
  */
 export const assignRoleToUser = async (userId, roleId) => {
     try {
-        const response = await axios.post(`${API_URL}/assign`, { userId, roleId });
-        return response.data;
+        const response = await api.post('/roles/assign', { userId, roleId });
+        if (response.data && response.data.success && response.data.data) {
+            return response.data.data;
+        }
+        return null;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể gán vai trò cho người dùng' };
     }
@@ -95,8 +108,11 @@ export const assignRoleToUser = async (userId, roleId) => {
  */
 export const removeRoleFromUser = async (userId, roleId) => {
     try {
-        const response = await axios.delete(`${API_URL}/remove`, { data: { userId, roleId } });
-        return response.data;
+        const response = await api.delete('/roles/remove', { data: { userId, roleId } });
+        if (response.data && response.data.success) {
+            return response.data;
+        }
+        return null;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể xóa vai trò khỏi người dùng' };
     }
@@ -109,8 +125,11 @@ export const removeRoleFromUser = async (userId, roleId) => {
  */
 export const getUserRoles = async (userId) => {
     try {
-        const response = await axios.get(`${API_URL}/user/${userId}`);
-        return response.data;
+        const response = await api.get(`/roles/user/${userId}`);
+        if (response.data && response.data.success && response.data.data) {
+            return response.data.data;
+        }
+        return [];
     } catch (error) {
         throw error.response?.data || { message: 'Không thể lấy danh sách vai trò của người dùng' };
     }
@@ -124,7 +143,7 @@ export const getUserRoles = async (userId) => {
  */
 export const checkUserRole = async (userId, roleName) => {
     try {
-        const response = await axios.get(`${API_URL}/check/${userId}/${roleName}`);
+        const response = await api.get(`/roles/check/${userId}/${roleName}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || { message: 'Không thể kiểm tra vai trò của người dùng' };
