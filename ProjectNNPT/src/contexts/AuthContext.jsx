@@ -20,8 +20,38 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         const userData = localStorage.getItem('user');
         
-        if (token && userData) {
-          setUser(JSON.parse(userData));
+        console.log('Checking auth status - Token:', token ? 'exists' : 'missing');
+        console.log('Checking auth status - User data:', userData);
+        
+        if (token && userData && userData !== 'undefined' && userData !== 'null') {
+          try {
+            const parsedUser = JSON.parse(userData);
+            console.log('Parsed user data:', parsedUser);
+            
+            // Kiểm tra xem user object có đầy đủ thông tin không
+            if (parsedUser && parsedUser._id) {
+              setUser(parsedUser);
+              console.log('User authenticated:', parsedUser._id);
+            } else {
+              console.error('Invalid user data structure:', parsedUser);
+              // Clear invalid data
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              localStorage.removeItem('userRole');
+            }
+          } catch (parseError) {
+            console.error('Error parsing user data:', parseError);
+            // Clear invalid data
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('userRole');
+          }
+        } else {
+          console.log('No valid auth data found');
+          // Clear invalid data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('userRole');
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
@@ -29,7 +59,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userRole');
-        navigate('/login');
       } finally {
         setLoading(false);
       }
@@ -42,12 +71,29 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await loginService(credentials);
       
-      // Lưu token và thông tin user vào localStorage
+      // Kiểm tra response có đúng định dạng không
+      if (!response || !response.token || !response.user) {
+        throw new Error('Invalid response format from server');
+      }
+      
+      console.log('Login response:', response);
+      
+      // Normalize role name to 'Admin' with capital A
+      let roleName = '';
+      if (response.user.role) {
+        if (typeof response.user.role === 'object' && response.user.role.roleName) {
+          // Ensure proper case for Admin role
+          roleName = response.user.role.roleName.toLowerCase() === 'admin' ? 'Admin' : response.user.role.roleName;
+        } else if (typeof response.user.role === 'string') {
+          // Ensure proper case for Admin role
+          roleName = response.user.role.toLowerCase() === 'admin' ? 'Admin' : response.user.role;
+        }
+      }
+      
+      // Store normalized data
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      if (response.user.role) {
-        localStorage.setItem('userRole', response.user.role);
-      }
+      localStorage.setItem('userRole', roleName);
       
       setUser(response.user);
       return response;
@@ -55,6 +101,11 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', error);
       throw error;
     }
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const handleLogout = async () => {
@@ -77,7 +128,13 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login: handleLogin, logout: handleLogout }}>
+    <AuthContext.Provider value={{
+      user,
+      login: handleLogin,
+      logout: handleLogout,
+      updateUser: handleUpdateUser,
+      isAuthenticated: !!user
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -17,21 +17,42 @@
     padding: 20px;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: white;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
   
-  .logo h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    text-transform: uppercase;
+  .logoImage {
+    width: 60px;
+    height: auto;
+    margin: 10px 0;
+  }
+  
+  .logo::before {
+    content: 'FULL STACK';
+    display: block;
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  .logo::after {
+    content: 'TRIDZ';
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c3e50;
     letter-spacing: 1px;
   }
   
   .nav {
-    padding: 20px 0;
+    padding: 15px 0;
     flex: 1;
+    overflow-y: auto;
   }
   
   .nav ul {
@@ -41,29 +62,31 @@
   }
   
   .nav li {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
   
   .nav li a {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    padding: 12px 25px;
     color: #ecf0f1;
     text-decoration: none;
     transition: all 0.3s ease;
     border-left: 4px solid transparent;
+    font-size: 15px;
+    font-weight: 400;
   }
   
   .nav li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
-    border-left-color: #3498db;
+    border-left-color: #e67e22;
   }
   
   .nav li a.active {
-    background-color: rgba(52, 152, 219, 0.2);
-    color: #3498db;
-    border-left-color: #3498db;
+    background-color: rgba(230, 126, 34, 0.2);
+    color: #e67e22;
+    border-left-color: #e67e22;
     font-weight: 500;
   }
   
@@ -97,5 +120,27 @@
   
     .sidebar.open {
       transform: translateX(0);
+    }
+  
+    .logo {
+      padding: 15px;
+    }
+  
+    .logoImage {
+      width: 50px;
+      margin: 8px 0;
+    }
+  
+    .logo::before {
+      font-size: 14px;
+    }
+  
+    .logo::after {
+      font-size: 20px;
+    }
+  
+    .nav li a {
+      padding: 10px 20px;
+      font-size: 14px;
     }
   }

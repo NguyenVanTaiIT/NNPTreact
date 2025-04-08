@@ -4,32 +4,32 @@ import Button from '../../common/Button';
 import Table from '../../common/Table';
 import UserForm from './UserForm';
 
-const UserList = ({ users, onDelete, onEdit, onCreate }) => {
+const UserList = ({ users, roles = [], onDelete, onEdit, onCreate }) => {
   const [showForm, setShowForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleEdit = (user) => {
+    console.log('UserList - Editing user:', user);
     setSelectedUser(user);
     setShowForm(true);
   };
 
-  const handleCreate = () => {
-    setSelectedUser(null);
-    setShowForm(true);
-  };
-
-  const handleFormSubmit = (userData) => {
+  const handleFormSubmit = (formData) => {
+    console.log('UserList - Form submitted with data:', formData);
     if (selectedUser) {
-      onEdit(userData);
-    } else {
-      onCreate(userData);
+      // Pass the form data to the parent component
+      onEdit(formData);
     }
     setShowForm(false);
   };
 
   const getRoleName = (role) => {
     if (!role) return 'No Role';
-    if (typeof role === 'string') return role;
+    if (typeof role === 'string') {
+      // Try to find the role name from the roles array
+      const foundRole = roles.find(r => r._id === role);
+      return foundRole ? foundRole.roleName : role;
+    }
     return role.roleName || 'Unknown Role';
   };
 
@@ -37,28 +37,31 @@ const UserList = ({ users, onDelete, onEdit, onCreate }) => {
     <div className={styles.userList}>
       <div className={styles.header}>
         <h2>User Management</h2>
-        <Button variant="success" onClick={handleCreate}>
-          Add New User
-        </Button>
       </div>
 
       {showForm && (
         <UserForm
           user={selectedUser}
+          roles={roles}
           onSubmit={handleFormSubmit}
           onCancel={() => setShowForm(false)}
         />
       )}
 
-      <Table headers={['ID', 'Name', 'Email', 'Role', 'Actions']}>
+      <Table headers={['Username', 'Email', 'Full Name', 'Role', 'Status', 'Actions']}>
         {users.map((user) => (
           <tr key={user._id}>
-            <td>{user._id}</td>
-            <td>{user.name}</td>
+            <td>{user.username}</td>
             <td>{user.email}</td>
+            <td>{user.fullName || '-'}</td>
             <td>
               <span className={`${styles.role} ${styles[getRoleName(user.role).toLowerCase()]}`}>
                 {getRoleName(user.role)}
+              </span>
+            </td>
+            <td>
+              <span className={`${styles.status} ${user.status ? styles.active : styles.inactive}`}>
+                {user.status ? 'Active' : 'Inactive'}
               </span>
             </td>
             <td>

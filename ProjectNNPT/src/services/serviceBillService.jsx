@@ -1,6 +1,6 @@
-import axios from 'axios';
+import api from './api';
 
-const API_URL = 'http://localhost:3000/serviceBill';
+const API_URL = `${import.meta.env.VITE_API_URL}/servicesbills`;
 
 /**
  * Lấy danh sách tất cả các hóa đơn dịch vụ
@@ -8,7 +8,7 @@ const API_URL = 'http://localhost:3000/serviceBill';
  */
 export const getAllServiceBills = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await api.get(API_URL);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể lấy danh sách hóa đơn dịch vụ' };
@@ -22,7 +22,7 @@ export const getAllServiceBills = async () => {
  */
 export const getServiceBillById = async (billId) => {
   try {
-    const response = await axios.get(`${API_URL}/${billId}`);
+    const response = await api.get(`${API_URL}/${billId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể lấy thông tin hóa đơn' };
@@ -36,7 +36,7 @@ export const getServiceBillById = async (billId) => {
  */
 export const createServiceBill = async (billData) => {
   try {
-    const response = await axios.post(API_URL, billData);
+    const response = await api.post(API_URL, billData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể tạo hóa đơn mới' };
@@ -51,7 +51,7 @@ export const createServiceBill = async (billData) => {
  */
 export const updateServiceBill = async (billId, billData) => {
   try {
-    const response = await axios.put(`${API_URL}/${billId}`, billData);
+    const response = await api.put(`${API_URL}/${billId}`, billData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể cập nhật hóa đơn' };
@@ -65,7 +65,7 @@ export const updateServiceBill = async (billId, billData) => {
  */
 export const deleteServiceBill = async (billId) => {
   try {
-    const response = await axios.delete(`${API_URL}/${billId}`);
+    const response = await api.delete(`${API_URL}/${billId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể xóa hóa đơn' };
@@ -79,7 +79,7 @@ export const deleteServiceBill = async (billId) => {
  */
 export const getServiceBillsByUserId = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/user/${userId}`);
+    const response = await api.get(`${API_URL}/user/${userId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể lấy hóa đơn của người dùng' };

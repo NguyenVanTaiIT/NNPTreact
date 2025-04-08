@@ -2,31 +2,14 @@ import React, { useState } from 'react';
 import styles from '../../CSS/AdminCSS/RoomList.module.css';
 import Button from '../../common/Button';
 import Table from '../../common/Table';
-import RoomForm from './RoomForm';
 
 const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
-  const [showForm, setShowForm] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
 
   const handleEdit = (room) => {
-    setSelectedRoom(room);
-    setShowForm(true);
-  };
-
-  const handleCreate = () => {
-    setSelectedRoom(null);
-    setShowForm(true);
-  };
-
-  const handleFormSubmit = (roomData) => {
-    if (selectedRoom) {
-      onEdit(roomData);
-    } else {
-      onCreate(roomData);
-    }
-    setShowForm(false);
+    console.log('Edit clicked for room:', room);
+    onEdit(room);
   };
 
   const handleDeleteClick = (roomId) => {
@@ -57,24 +40,16 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
     <div className={styles.roomList}>
       <div className={styles.header}>
         <h2>Room Management</h2>
-        <Button variant="success" onClick={handleCreate}>
+        <Button variant="success" onClick={onCreate}>
           Add New Room
         </Button>
       </div>
 
-      {showForm && (
-        <RoomForm
-          room={selectedRoom}
-          onSubmit={handleFormSubmit}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
-
       <Table 
         headers={[
-          'Room Number', 
-          'Type', 
-          'Capacity', 
+          'Room Name', 
+          'Floor',
+          'Hotel',
           'Price', 
           'Status', 
           'Actions'
@@ -82,9 +57,9 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
       >
         {rooms.map((room) => (
           <tr key={room._id}>
-            <td>{room.roomNumber}</td>
-            <td>{room.type}</td>
-            <td>{room.capacity} persons</td>
+            <td>{room.name}</td>
+            <td>{room.floor ? room.floor.name : 'N/A'}</td>
+            <td>{room.hotel ? room.hotel.name : 'N/A'}</td>
             <td>{formatPrice(room.price)}</td>
             <td>
               <span className={`${styles.status} ${getStatusClass(room.isAvailable)}`}>

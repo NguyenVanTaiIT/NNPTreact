@@ -3,7 +3,7 @@ import RoomList from './RoomList';
 import RoomForm from './RoomForm';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';
-import { getAllRooms } from '../../../services/roomService';
+import { getAllRooms, getRoomById, createRoom, updateRoom, deleteRoom } from '../../../services/roomService';
 import styles from '../../CSS/AdminCSS/Rooms.module.css';
 
 const Rooms = () => {
@@ -45,7 +45,18 @@ const Rooms = () => {
 
   const handleUpdate = async (roomData) => {
     try {
-      await updateRoom(selectedRoom._id, roomData);
+      // Store the selectedRoom ID before it might be cleared
+      const roomId = selectedRoom?._id;
+      
+      if (!roomId) {
+        console.error('No room selected for update. Selected room:', selectedRoom);
+        throw new Error('No room selected for update');
+      }
+      
+      console.log('Updating room with ID:', roomId);
+      console.log('Update data:', roomData);
+      
+      await updateRoom(roomId, roomData);
       await fetchRooms(); // Refresh the list
       setIsFormOpen(false);
       setSelectedRoom(null);
@@ -69,6 +80,7 @@ const Rooms = () => {
   };
 
   const openForm = (room = null) => {
+    console.log('Opening form with room:', room);
     setSelectedRoom(room);
     setIsFormOpen(true);
   };

@@ -46,6 +46,20 @@
   justify-content: flex-end;
 }
 
+.editButton, .deleteButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .editButton {
   background-color: #3498db;
   color: white;
@@ -53,6 +67,11 @@
 
 .editButton:hover {
   background-color: #2980b9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.editButton:active {
+  transform: translateY(1px);
 }
 
 .deleteButton {
@@ -62,6 +81,11 @@
 
 .deleteButton:hover {
   background-color: #c0392b;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.deleteButton:active {
+  transform: translateY(1px);
 }
 
 /* Modal styles */

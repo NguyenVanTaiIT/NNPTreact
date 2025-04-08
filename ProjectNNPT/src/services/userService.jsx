@@ -60,9 +60,12 @@ export const getAllUsers = async () => {
  */
 export const createUser = async (userData) => {
   try {
-    const response = await axiosInstance.post(API_ENDPOINTS.USERS, userData);
+    console.log('userService - Creating user with data:', userData);
+    const response = await axiosInstance.post(`${API_ENDPOINTS.USERS}/register`, userData);
+    console.log('userService - Create response:', response.data);
     return response.data;
   } catch (error) {
+    console.error('userService - Error creating user:', error);
     throw handleApiError(error);
   }
 };
@@ -89,9 +92,18 @@ export const getUserById = async (userId) => {
  */
 export const updateUser = async (userId, userData) => {
   try {
+    console.log('userService - Updating user with ID:', userId);
+    console.log('userService - Update data:', userData);
+    
     const response = await axiosInstance.put(`${API_ENDPOINTS.USERS}/${userId}`, userData);
-    return response.data;
+    console.log('userService - Update response:', response.data);
+    
+    if (response.data && response.data.success && response.data.data) {
+      return response.data.data;
+    }
+    throw new Error('Invalid response format from server');
   } catch (error) {
+    console.error('userService - Error updating user:', error);
     throw handleApiError(error);
   }
 };
@@ -103,9 +115,14 @@ export const updateUser = async (userId, userData) => {
  */
 export const deleteUser = async (userId) => {
   try {
+    console.log('userService - Deleting user with ID:', userId);
+    
     const response = await axiosInstance.delete(`${API_ENDPOINTS.USERS}/${userId}`);
+    console.log('userService - Delete response:', response.data);
+    
     return response.data;
   } catch (error) {
+    console.error('userService - Error deleting user:', error);
     throw handleApiError(error);
   }
 };

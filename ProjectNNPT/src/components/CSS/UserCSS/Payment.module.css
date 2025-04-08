@@ -1,0 +1,189 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.paymentCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.paymentHeader {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.paymentHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #212529;
+}
+
+.paymentInfo {
+  padding: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.amount {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #28a745;
+}
+
+.paymentMethods {
+  padding: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.paymentMethods h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #212529;
+}
+
+.methodOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.methodOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.methodOption input[type="radio"] {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.bankInfo,
+.creditCardForm {
+  padding: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.bankInfo h3,
+.creditCardForm h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #212529;
+}
+
+.bankDetails {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.bankDetails p {
+  margin: 0.5rem 0;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.paymentActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.btnBack,
+.btnPay {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnBack {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+}
+
+.btnBack:hover {
+  background-color: #5a6268;
+}
+
+.btnPay {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+}
+
+.btnPay:hover {
+  background-color: #218838;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.errorContainer {
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .paymentActions {
+    flex-direction: column;
+  }
+
+  .btnBack,
+  .btnPay {
+    width: 100%;
+  }
+} 

@@ -21,12 +21,16 @@ const Users = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [usersData, rolesData] = await Promise.all([
-        getAllUsers(),
-        getAllRoles()
-      ]);
-      setUsers(usersData);
-      setRoles(rolesData);
+      
+      // Fetch users and roles separately to better handle errors
+      const usersData = await getAllUsers();
+      console.log('Fetched users:', usersData);
+      setUsers(Array.isArray(usersData) ? usersData : []);
+      
+      const rolesData = await getAllRoles();
+      console.log('Fetched roles:', rolesData);
+      setRoles(Array.isArray(rolesData) ? rolesData : []);
+      
       setError(null);
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -49,7 +53,22 @@ const Users = () => {
 
   const handleUpdate = async (userData) => {
     try {
-      await updateUser(selectedUser._id, userData);
+      console.log('handleUpdate - userData:', userData);
+      
+      if (!userData || !userData._id) {
+        throw new Error('No user ID provided for update');
+      }
+      
+      const userId = userData._id;
+      // Remove _id from the update data to avoid conflicts
+      const { _id, ...updateData } = userData;
+      
+      console.log('Updating user with ID:', userId);
+      console.log('Update data:', updateData);
+      
+      const updatedUser = await updateUser(userId, updateData);
+      console.log('User updated successfully:', updatedUser);
+      
       await fetchData();
       setIsFormOpen(false);
       setSelectedUser(null);
@@ -62,6 +81,7 @@ const Users = () => {
 
   const handleCreate = async (userData) => {
     try {
+      console.log('Creating user with data:', userData);
       await createUser(userData);
       await fetchData();
       setIsFormOpen(false);
@@ -73,6 +93,7 @@ const Users = () => {
   };
 
   const openForm = (user = null) => {
+    console.log('Opening form with user:', user);
     setSelectedUser(user);
     setIsFormOpen(true);
   };
@@ -83,15 +104,16 @@ const Users = () => {
   };
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage message={error} onRetry={fetchData} />;
 
   return (
     <div>
       <UserList
         users={users}
+        roles={roles}
         onDelete={handleDelete}
-        onEdit={openForm}
-        onCreate={() => openForm()}
+        onEdit={handleUpdate}
+        onCreate={handleCreate}
       />
       {isFormOpen && (
         <UserForm

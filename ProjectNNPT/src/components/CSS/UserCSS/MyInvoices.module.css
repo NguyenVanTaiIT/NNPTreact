@@ -1,0 +1,180 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.container h2 {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.errorContainer {
+  color: #dc3545;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.emptyState p {
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.invoicesList {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.invoiceCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.invoiceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.invoiceHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.invoiceDetails {
+  padding: 1.5rem;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+}
+
+.detailItem span:first-child {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.invoiceActions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.btnPrimary,
+.btnView,
+.btnPay {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.btnPrimary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btnPrimary:hover {
+  background-color: #0056b3;
+}
+
+.btnView {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btnView:hover {
+  background-color: #5a6268;
+}
+
+.btnPay {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btnPay:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .invoiceHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .invoiceActions {
+    flex-direction: column;
+  }
+
+  .btnPrimary,
+  .btnView,
+  .btnPay {
+    width: 100%;
+  }
+} 

@@ -4,8 +4,9 @@ import styles from './Sidebar.module.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes.config';
 import { useAuth } from '../../contexts/AuthContext';
+import logo from '../../assets/images/logoNode.jpg';
 
-const Sidebar = ({ title = 'Admin Panel' }) => {
+const Sidebar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ const Sidebar = ({ title = 'Admin Panel' }) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.logo}>
-        <h2>{title}</h2>
+        <img src={logo} alt="TRIDZ Logo" className={styles.logoImage} />
       </div>
       <nav className={styles.nav}>
         <ul>
@@ -28,6 +29,22 @@ const Sidebar = ({ title = 'Admin Panel' }) => {
               end
             >
               Dashboard
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.HOTELS} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Hotel Management
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.FLOORS} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Floor Management
             </NavLink>
           </li>
           <li>
@@ -44,6 +61,38 @@ const Sidebar = ({ title = 'Admin Panel' }) => {
               className={({ isActive }) => isActive ? styles.active : ''}
             >
               User Management
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.BOOKINGS} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Booking Management
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.INVOICES} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Invoice Management
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.SERVICES} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Service Management
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to={ROUTES.ADMIN.SERVICES_BILLS} 
+              className={({ isActive }) => isActive ? styles.active : ''}
+            >
+              Service Bills
             </NavLink>
           </li>
         </ul>

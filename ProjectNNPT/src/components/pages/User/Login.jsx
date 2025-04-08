@@ -27,12 +27,12 @@ function Login() {
       
       if (user && user.role) {
         if (typeof user.role === 'object' && user.role.roleName) {
-          isAdmin = user.role.roleName.toLowerCase() === 'admin';
+          isAdmin = user.role.roleName === 'Admin';
         } else if (typeof user.role === 'string') {
           try {
             const roleDetails = await getRoleById(user.role);
             if (roleDetails?.data?.roleName) {
-              isAdmin = roleDetails.data.roleName.toLowerCase() === 'admin';
+              isAdmin = roleDetails.data.roleName === 'Admin';
             }
           } catch (err) {
             console.error('Error fetching role details:', err);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Cấu hình axios
-const axiosInstance = axios.create({
+const api = axios.create({
   baseURL: 'http://localhost:3000',
   timeout: 10000,
   headers: {
@@ -36,73 +36,46 @@ export const setupAxiosInterceptors = (navigate) => {
   }
 
   // Thêm interceptor để tự động thêm token vào header
-  axiosInstance.interceptors.request.use(
+  api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('token');
+      console.log('Request interceptor - URL:', config.url);
+      console.log('Request interceptor - Token available:', !!token);
+      
       if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
+        console.log('Request interceptor - Added token to headers');
+      } else {
+        console.log('Request interceptor - No token available');
       }
       return config;
     },
     (error) => {
+      console.error('Request interceptor error:', error);
       return Promise.reject(error);
     }
   );
 
   // Thêm interceptor để xử lý lỗi
-  axiosInstance.interceptors.response.use(
+  api.interceptors.response.use(
     (response) => {
       return response;
     },
     async (error) => {
-      const originalRequest = error.config;
-
-      // Xử lý lỗi 401 (Unauthorized)
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject });
-          })
-            .then(token => {
-              originalRequest.headers['Authorization'] = `Bearer ${token}`;
-              return axiosInstance(originalRequest);
-            })
-            .catch(err => Promise.reject(err));
-        }
-
-        originalRequest._retry = true;
-        isRefreshing = true;
-
-        try {
-          const refreshToken = localStorage.getItem('refreshToken');
-          if (!refreshToken) {
-            throw new Error('No refresh token available');
-          }
-
-          const response = await axios.post(`${axiosInstance.defaults.baseURL}/auth/refresh-token`, {
-            refreshToken
-          });
-
-          const { token } = response.data;
-          localStorage.setItem('token', token);
-          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          
-          processQueue(null, token);
-          return axiosInstance(originalRequest);
-        } catch (refreshError) {
-          processQueue(refreshError, null);
-          // Xóa token và chuyển hướng đến trang đăng nhập
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('user');
-          localStorage.removeItem('userRole');
-          navigate('/login');
-          return Promise.reject(refreshError);
-        } finally {
-          isRefreshing = false;
-        }
+      console.error('Response interceptor error:', error);
+      console.error('Response error status:', error.response?.status);
+      console.error('Response error data:', error.response?.data);
+      
+      // Handle 401 Unauthorized errors
+      if (error.response?.status === 401) {
+        console.error('Authentication error - redirecting to login');
+        // Clear token and redirect to login
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('userRole');
+        window.location.href = '/login';
       }
-
+      
       return Promise.reject(error);
     }
   );
@@ -112,7 +85,7 @@ export const setupAxiosInterceptors = (navigate) => {
 
 // Các endpoint API
 export const API_ENDPOINTS = {
-  AUTH: '/auth',
+  AUTH: '/auths',
   USERS: '/users',
   ROLES: '/roles',
   ROOMS: '/rooms',
@@ -137,4 +110,4 @@ export const handleApiError = (error) => {
   }
 };
 
-export default axiosInstance; 
+export default api; 

@@ -2,7 +2,7 @@ import api from './api';
 import axios from 'axios';
 
 const API_ENDPOINTS = {
-  AUTH: '/auth'
+  AUTH: '/auths'
 };
 
 const handleApiError = (error) => {
@@ -39,82 +39,40 @@ export const register = async (userData) => {
  */
 export const login = async (credentials) => {
   try {
+    console.log('Login request with credentials:', credentials);
     const response = await api.post(`${API_ENDPOINTS.AUTH}/login`, credentials);
-    const { token, refreshToken, user } = response.data;
+    console.log('Login API response:', response.data);
     
-    // Lưu tokens
-    localStorage.setItem('token', token);
-    localStorage.setItem('refreshToken', refreshToken);
-    
-    // Lưu thông tin người dùng
-    localStorage.setItem('user', JSON.stringify(user));
-    
-    // Kiểm tra và lưu vai trò người dùng
-    if (user && user.role) {
-      if (typeof user.role === 'object' && user.role.roleName) {
-        // Nếu role là object có roleName
-        localStorage.setItem('userRole', user.role.roleName.toLowerCase());
-      } else if (typeof user.role === 'string') {
-        // Nếu role là ID, lấy thông tin role
-        try {
-          // Log để debug
-          console.log('Fetching role details for ID:', user.role);
-          
-          const roleResponse = await api.get(`/roles/${user.role}`);
-          console.log('Role response:', roleResponse.data);
-          
-          // Kiểm tra cấu trúc dữ liệu trả về
-          if (roleResponse.data && roleResponse.data.success && roleResponse.data.data) {
-            const roleData = roleResponse.data.data;
-            if (roleData.roleName) {
-              // Cập nhật userRole với tên role
-              localStorage.setItem('userRole', roleData.roleName.toLowerCase());
-            } else {
-              console.log('Role data is missing roleName:', roleData);
-              localStorage.setItem('userRole', 'user');
-            }
-          } else {
-            console.log('Unexpected role response structure:', roleResponse.data);
-            localStorage.setItem('userRole', 'user');
-          }
-        } catch (err) {
-          console.error('Error fetching role details:', err);
-          // Thử lấy thông tin vai trò trực tiếp từ API
-          try {
-            const directResponse = await api.get(`/users/${user.id}/role`);
-            console.log('Direct role response:', directResponse.data);
-            
-            // Kiểm tra cấu trúc dữ liệu trả về
-            if (directResponse.data && directResponse.data.success && directResponse.data.data) {
-              const roleData = directResponse.data.data;
-              if (roleData.roleName) {
-                localStorage.setItem('userRole', roleData.roleName.toLowerCase());
-              } else {
-                localStorage.setItem('userRole', 'user');
-              }
-            } else {
-              localStorage.setItem('userRole', 'user');
-            }
-          } catch (directErr) {
-            console.error('Error fetching direct role:', directErr);
-            localStorage.setItem('userRole', 'user');
-          }
-        }
-      } else {
-        // Nếu role không phải object hoặc string
-        localStorage.setItem('userRole', 'user');
-      }
-    } else {
-      // Mặc định là user nếu không có thông tin vai trò
-      localStorage.setItem('userRole', 'user');
+    // Kiểm tra response có đúng định dạng không
+    if (!response.data || !response.data.success || !response.data.data) {
+      console.error('Invalid response format from server:', response.data);
+      throw new Error('Invalid response format from server');
     }
     
-    // Log để debug
-    console.log('User role after login:', localStorage.getItem('userRole'));
-    console.log('User data after login:', user);
+    // Lấy dữ liệu từ response.data.data
+    const { token, user } = response.data.data;
     
-    return { user };
+    // Kiểm tra dữ liệu user
+    if (!user || !user.id) {
+      console.error('Invalid user data in response:', user);
+      throw new Error('Invalid user data in response');
+    }
+    
+    // Đảm bảo user object có _id thay vì id
+    const normalizedUser = {
+      ...user,
+      _id: user.id || user._id
+    };
+    
+    console.log('Normalized user data:', normalizedUser);
+    
+    // Trả về dữ liệu đã được xử lý
+    return {
+      token,
+      user: normalizedUser
+    };
   } catch (error) {
+    console.error('Login error:', error);
     throw handleApiError(error);
   }
 };

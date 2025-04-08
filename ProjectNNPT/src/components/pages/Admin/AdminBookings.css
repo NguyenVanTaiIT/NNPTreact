@@ -1,0 +1,110 @@
+.admin-bookings {
+  padding: 20px;
+}
+
+.admin-bookings h2 {
+  margin-bottom: 20px;
+}
+
+.admin-bookings table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-bookings th,
+.admin-bookings td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.admin-bookings th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.admin-bookings tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.admin-bookings tr:hover {
+  background-color: #f5f5f5;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.btn-confirm,
+.btn-cancel,
+.btn-delete,
+.btn-view-invoice {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 4px;
+  font-weight: 500;
+}
+
+.btn-confirm {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-view-invoice {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #218838;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}
+
+.btn-delete:hover {
+  background-color: #5a6268;
+}
+
+.btn-view-invoice:hover {
+  background-color: #0056b3;
+}
+
+.total-amount {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  font-size: 1.1em;
+  color: #28a745;
+} 

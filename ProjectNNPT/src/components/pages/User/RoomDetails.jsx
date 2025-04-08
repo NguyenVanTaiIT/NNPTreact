@@ -1,93 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Carousel } from 'react-bootstrap';
+import { useParams, Link } from 'react-router-dom';
 import styles from '../../CSS/UserCSS/RoomDetails.module.css';
+import room1 from '../../../assets/images/photos/8.jpg';
+import room2 from '../../../assets/images/photos/9.jpg';
+import room3 from '../../../assets/images/photos/10.jpg';
+import room4 from '../../../assets/images/photos/11.jpg';
 import Footer from '../../layouts/Footer';
 import Header from '../../layouts/header';
-import LoadingSpinner from '../../utils/LoadingSpinner';
-import ErrorMessage from '../../utils/ErrorMessage';
 import { getRoomById } from '../../../services/roomService';
+import LoadingSpinner from '../../utils/LoadingSpinner';
 
 function RoomDetails() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
+  // Hàm lấy dữ liệu phòng từ MongoDB
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
         setLoading(true);
-        const roomData = await getRoomById(id);
-        setRoom(roomData);
+        const data = await getRoomById(id);
+        setRoom(data);
         setError(null);
       } catch (err) {
-        setError('Không thể tải thông tin phòng');
         console.error('Error fetching room details:', err);
+        setError('Không thể tải thông tin phòng. Vui lòng thử lại sau.');
       } finally {
         setLoading(false);
       }
     };
-
-    fetchRoomDetails();
+    
+    if (id) {
+      fetchRoomDetails();
+    }
   }, [id]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error} onRetry={() => window.location.reload()} />;
-  }
-
-  if (!room) {
-    return <ErrorMessage message="Không tìm thấy phòng" onRetry={() => window.location.reload()} />;
-  }
+  
+  // Hàm lấy ảnh ngẫu nhiên cho phòng
+  const getRandomRoomImage = () => {
+    const images = [room1, room2, room3, room4];
+    return images[Math.floor(Math.random() * images.length)];
+  };
 
   return (
     <>
       <Header />
       <div className={styles.container}>
-        <h1 className={styles.title}>{room.name}</h1>
-
-        <div id="RoomDetails" className={styles.carousel}>
-          <Carousel>
-            {room.images && room.images.map((img, index) => (
-              <Carousel.Item key={index}>
-                <img src={img} className={styles.imgResponsive} alt={`slide ${index + 1}`} />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </div>
-
-        <div className={styles.roomFeatures}>
-          <div className={styles.row}>
-            <div className={styles.colSm12}>
-              <p>{room.description}</p>
-              <p>
-                By Learning Ways To Become Peaceful. One of the greatest barriers to making the sale is your prospect's natural. Don't stubbornly. Don't stubbornly. Don't stubbornly. -And Gain Power By Learning Ways To Become Peaceful.
-              </p>
+        <h2>Chi Tiết Phòng</h2>
+        
+        {loading ? (
+          <div className={styles.loadingContainer}>
+            <LoadingSpinner />
+            <p>Đang tải thông tin phòng...</p>
+          </div>
+        ) : error ? (
+          <div className={styles.errorContainer}>
+            <p>{error}</p>
+            <Link to="/rooms-tariff" className={styles.btn}>
+              Quay Lại Danh Sách Phòng
+            </Link>
+          </div>
+        ) : room ? (
+          <div className={styles.roomDetails}>
+            <div className={styles.roomImage}>
+              <img src={getRandomRoomImage()} alt={room.name} />
             </div>
-            <div className={styles.colSm6}>
-              <h3>Amenities</h3>
-              <ul>
-                {room.amenities && room.amenities.map((amenity, index) => (
-                  <li key={index}>{amenity}</li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.colSm3}>
-              <div className={styles.sizePrice}>
-                Size<span>{room.size}</span>
+            <div className={styles.roomInfo}>
+              <h3>{room.name}</h3>
+              <div className={styles.roomType}>
+                <span>Loại phòng:</span> {room.type}
               </div>
-            </div>
-            <div className={styles.colSm3}>
-              <div className={styles.sizePrice}>
-                Price<span>{room.price}</span>
+              <div className={styles.roomPrice}>
+                <span>Giá:</span> {room.price.toLocaleString('vi-VN')} VNĐ/đêm
+              </div>
+              <div className={styles.roomStatus}>
+                <span>Trạng thái:</span> {room.isAvailable ? 'Còn trống' : 'Đã đặt'}
+              </div>
+              {room.amenities && room.amenities.length > 0 && (
+                <div className={styles.roomAmenities}>
+                  <span>Tiện nghi:</span>
+                  <ul>
+                    {room.amenities.map((amenity, index) => (
+                      <li key={index}>{amenity}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className={styles.roomActions}>
+                <Link to="/rooms-tariff" className={styles.btnSecondary}>
+                  Quay Lại
+                </Link>
+                {room.isAvailable && (
+                  <Link to={`/booking/${room._id}`} className={styles.btnPrimary}>
+                    Đặt Phòng
+                  </Link>
+                )}
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className={styles.errorContainer}>
+            <p>Không tìm thấy thông tin phòng</p>
+            <Link to="/rooms-tariff" className={styles.btn}>
+              Quay Lại Danh Sách Phòng
+            </Link>
+          </div>
+        )}
       </div>
       <Footer />
     </>

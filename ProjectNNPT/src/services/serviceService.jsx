@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/services';
+import api from './api';
 
 /**
  * Lấy danh sách tất cả các dịch vụ
@@ -8,7 +6,7 @@ const API_URL = 'http://localhost:3000/services';
  */
 export const getAllServices = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await api.get('/services');
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể lấy danh sách dịch vụ' };
@@ -22,10 +20,11 @@ export const getAllServices = async () => {
  */
 export const getServiceById = async (serviceId) => {
   try {
-    const response = await axios.get(`${API_URL}/${serviceId}`);
+    const response = await api.get(`/services/${serviceId}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Không thể lấy thông tin dịch vụ' };
+    console.error('Error fetching service:', error);
+    throw error.response?.data || error;
   }
 };
 
@@ -36,10 +35,11 @@ export const getServiceById = async (serviceId) => {
  */
 export const createService = async (serviceData) => {
   try {
-    const response = await axios.post(API_URL, serviceData);
+    const response = await api.post('/services/create', serviceData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: 'Không thể tạo dịch vụ mới' };
+    console.error('Error creating service:', error);
+    throw error.response?.data || error;
   }
 };
 
@@ -51,7 +51,7 @@ export const createService = async (serviceData) => {
  */
 export const updateService = async (serviceId, serviceData) => {
   try {
-    const response = await axios.put(`${API_URL}/${serviceId}`, serviceData);
+    const response = await api.put(`/services/${serviceId}`, serviceData);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể cập nhật dịch vụ' };
@@ -65,9 +65,44 @@ export const updateService = async (serviceId, serviceData) => {
  */
 export const deleteService = async (serviceId) => {
   try {
-    const response = await axios.delete(`${API_URL}/${serviceId}`);
+    const response = await api.delete(`/services/${serviceId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Không thể xóa dịch vụ' };
   }
-}; 
+};
+
+export const getUserServices = async () => {
+  try {
+    const response = await api.get('/services/user');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user services:', error);
+    throw error.response?.data || error;
+  }
+};
+
+export const cancelService = async (serviceId) => {
+  try {
+    const response = await api.post(`/services/${serviceId}/cancel`);
+    return response.data;
+  } catch (error) {
+    console.error('Error canceling service:', error);
+    throw error.response?.data || error;
+  }
+};
+
+/**
+ * Tạo dịch vụ mới (chỉ dành cho admin)
+ * @param {Object} serviceData - Dữ liệu dịch vụ mới
+ * @returns {Promise<Object>} - Dịch vụ đã tạo
+ */
+export const createAdminService = async (serviceData) => {
+  try {
+    const response = await api.post('/services/admin/create', serviceData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating admin service:', error);
+    throw error.response?.data || error;
+  }
+};

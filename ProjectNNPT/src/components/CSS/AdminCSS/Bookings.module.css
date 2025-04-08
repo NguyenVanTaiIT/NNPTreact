@@ -1,0 +1,226 @@
+.container {
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h2 {
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filterBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+  background-color: #f8f9fa;
+}
+
+.filterBtn.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.errorContainer {
+  color: #dc3545;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.emptyState p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.bookingsList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.bookingCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.bookingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.bookingInfo h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.userInfo {
+  text-align: right;
+}
+
+.userInfo p {
+  margin: 0.25rem 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.bookingDetails {
+  padding: 1.5rem;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+}
+
+.detailItem span:first-child {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.bookingActions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.btnConfirm,
+.btnCancel,
+.btnView {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btnConfirm {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btnConfirm:hover {
+  background-color: #218838;
+}
+
+.btnCancel {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btnCancel:hover {
+  background-color: #c82333;
+}
+
+.btnView {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btnView:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .filterBtn {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .bookingHeader {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .userInfo {
+    text-align: left;
+    width: 100%;
+  }
+
+  .bookingActions {
+    flex-direction: column;
+  }
+
+  .btnConfirm,
+  .btnCancel,
+  .btnView {
+    width: 100%;
+  }
+} 

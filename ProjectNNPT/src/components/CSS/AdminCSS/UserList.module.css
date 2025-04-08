@@ -10,23 +10,45 @@
   }
   
   .role {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
     font-weight: 500;
   }
   
   .admin {
-    background-color: #d1ecf1;
-    color: #0c5460;
+    background-color: #ffebee;
+    color: #c62828;
   }
   
   .user {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #e3f2fd;
+    color: #1565c0;
   }
   
   .staff {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .guest {
+    background-color: #f3e5f5;
+    color: #6a1b9a;
+  }
+  
+  .status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+  
+  .active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .inactive {
+    background-color: #ffebee;
+    color: #c62828;
   }

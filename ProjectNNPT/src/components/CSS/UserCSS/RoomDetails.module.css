@@ -67,3 +67,143 @@
     font-weight: bold;
     color: #333;
   }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  width: 100%;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  width: 100%;
+  color: #e74c3c;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+.roomDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.roomImage {
+  flex: 1;
+  min-width: 300px;
+}
+
+.roomImage img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.roomInfo {
+  flex: 1;
+  min-width: 300px;
+}
+
+.roomInfo h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.roomType, .roomPrice, .roomStatus {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.roomType span, .roomPrice span, .roomStatus span {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #555;
+}
+
+.roomAmenities {
+  margin-bottom: 20px;
+}
+
+.roomAmenities span {
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.roomAmenities ul {
+  list-style-type: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.roomAmenities li {
+  background-color: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.roomActions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn, .btnPrimary, .btnSecondary {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.btnPrimary {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.btnSecondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn:hover, .btnPrimary:hover, .btnSecondary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .roomDetails {
+    flex-direction: column;
+  }
+  
+  .roomImage, .roomInfo {
+    width: 100%;
+  }
+}
