@@ -8,7 +8,7 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
 
   const handleEdit = (room) => {
-    console.log('Edit clicked for room:', room);
+    console.log('Chỉnh sửa phòng:', room);
     onEdit(room);
   };
 
@@ -39,31 +39,31 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
   return (
     <div className={styles.roomList}>
       <div className={styles.header}>
-        <h2>Room Management</h2>
+        <h2>Quản lý phòng</h2>
         <Button variant="success" onClick={onCreate}>
-          Add New Room
+          Thêm phòng mới
         </Button>
       </div>
 
       <Table 
         headers={[
-          'Room Name', 
-          'Floor',
-          'Hotel',
-          'Price', 
-          'Status', 
-          'Actions'
+          'Tên phòng', 
+          'Tầng',
+          'Khách sạn',
+          'Giá', 
+          'Trạng thái', 
+          'Hành động'
         ]}
       >
         {rooms.map((room) => (
           <tr key={room._id}>
             <td>{room.name}</td>
-            <td>{room.floor ? room.floor.name : 'N/A'}</td>
-            <td>{room.hotel ? room.hotel.name : 'N/A'}</td>
+            <td>{room.floor ? room.floor.name : 'Không có'}</td>
+            <td>{room.hotel ? room.hotel.name : 'Không có'}</td>
             <td>{formatPrice(room.price)}</td>
             <td>
               <span className={`${styles.status} ${getStatusClass(room.isAvailable)}`}>
-                {room.isAvailable ? 'Available' : 'Occupied'}
+                {room.isAvailable ? 'Còn trống' : 'Đã đặt'}
               </span>
             </td>
             <td className={styles.actions}>
@@ -72,14 +72,14 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
                 onClick={() => handleEdit(room)}
                 className={styles.editButton}
               >
-                Edit
+                Chỉnh sửa
               </Button>
               <Button 
                 variant="danger" 
                 onClick={() => handleDeleteClick(room._id)}
                 className={styles.deleteButton}
               >
-                Delete
+                Xoá
               </Button>
             </td>
           </tr>
@@ -89,20 +89,20 @@ const RoomList = ({ rooms, onDelete, onEdit, onCreate }) => {
       {showConfirmDelete && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete this room?</p>
+            <h3>Xác nhận xoá</h3>
+            <p>Bạn có chắc chắn muốn xoá phòng này không?</p>
             <div className={styles.modalActions}>
               <Button 
                 variant="secondary" 
                 onClick={() => setShowConfirmDelete(false)}
               >
-                Cancel
+                Huỷ
               </Button>
               <Button 
                 variant="danger" 
                 onClick={confirmDelete}
               >
-                Delete
+                Xoá
               </Button>
             </div>
           </div>

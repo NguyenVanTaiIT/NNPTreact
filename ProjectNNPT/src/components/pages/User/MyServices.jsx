@@ -19,7 +19,7 @@ function MyServices() {
       console.log('Fetching user services...');
       const response = await getUserServices();
       console.log('Response from getUserServices:', response);
-      
+
       if (response.success) {
         console.log('Setting services:', response.data);
         setServices(response.data);
@@ -37,12 +37,11 @@ function MyServices() {
     }
   };
 
-  const handleCancelService = async (serviceId) => {
+  const handleCancelService = async (invoiceId) => {
     try {
-      const response = await cancelService(serviceId);
+      const response = await cancelService(invoiceId);
       if (response.success) {
         toast.success('Hủy dịch vụ thành công');
-        // Cập nhật lại danh sách dịch vụ
         fetchServices();
       } else {
         toast.error(response.message || 'Không thể hủy dịch vụ');
@@ -87,7 +86,7 @@ function MyServices() {
       <Header />
       <div className={styles.container}>
         <h2>Dịch Vụ Đã Đăng Ký</h2>
-        
+
         {services.length === 0 ? (
           <div className={styles.emptyState}>
             <p>Bạn chưa đăng ký dịch vụ nào.</p>
@@ -98,48 +97,63 @@ function MyServices() {
           </div>
         ) : (
           <div className={styles.servicesList}>
-            {services.map((service) => (
-              <div key={service._id} className={styles.serviceCard}>
-                <div className={styles.serviceHeader}>
-                  <h3>{service.name}</h3>
-                  <span className={`${styles.status} ${styles[service.status]}`}>
-                    {service.status === 'active' ? 'Đang hoạt động' :
-                     service.status === 'completed' ? 'Đã hoàn thành' :
-                     'Đã hủy'}
-                  </span>
-                </div>
-                
-                <div className={styles.serviceDetails}>
-                  <div className={styles.detailItem}>
-                    <span>Mô tả:</span>
-                    <span>{service.description}</span>
-                  </div>
-                  <div className={styles.detailItem}>
-                    <span>Ngày đăng ký:</span>
-                    <span>{new Date(service.createdAt).toLocaleDateString('vi-VN')}</span>
-                  </div>
-                  <div className={styles.detailItem}>
-                    <span>Giá:</span>
-                    <span>{service.price?.toLocaleString('vi-VN') || '0'} VNĐ</span>
-                  </div>
+            {services.map((invoice) => (
+              <div key={invoice._id} className={styles.invoiceCard}>
+                <h3>Hóa đơn #{invoice._id.slice(-6).toUpperCase()}</h3>
+                <div className={styles.invoiceMeta}>
+                  <span>Ngày tạo: {new Date(invoice.createdAt).toLocaleDateString('vi-VN')}</span>
+                  <span>Tổng tiền: {invoice.grandTotal.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
 
-                <div className={styles.serviceActions}>
-                  <Link 
-                    to={`/service/${service._id}`}
-                    className={styles.btnView}
-                  >
-                    Xem chi tiết
-                  </Link>
-                  {service.status === 'active' && (
-                    <button 
-                      className={styles.btnCancel}
-                      onClick={() => handleCancelService(service._id)}
-                    >
-                      Hủy dịch vụ
-                    </button>
-                  )}
-                </div>
+                {invoice.items.map((item, idx) => (
+                  <div key={idx} className={styles.serviceCard}>
+                    <div className={styles.serviceHeader}>
+                      <h4>{item.serviceId?.name || 'Dịch vụ không xác định'}</h4>
+                      <span className={`${styles.status} ${styles[invoice.status]}`}>
+                        {invoice.status === 'active' ? 'Đang hoạt động' :
+                         invoice.status === 'paid' ? 'Đã thanh toán' :
+                         invoice.status === 'unpaid' ? 'Chưa thanh toán' :
+                         'Đã hủy'}
+                      </span>
+                    </div>
+
+                    <div className={styles.serviceDetails}>
+                      <div className={styles.detailItem}>
+                        <span>Mô tả:</span>
+                        <span>{item.serviceId?.description || 'Không có mô tả'}</span>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <span>Số lượng:</span>
+                        <span>{item.quantity}</span>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <span>Đơn giá:</span>
+                        <span>{item.unitPrice.toLocaleString('vi-VN')} VNĐ</span>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <span>Thành tiền:</span>
+                        <span>{item.totalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                      </div>
+                    </div>
+
+                    <div className={styles.serviceActions}>
+                      <Link
+                        to={`/service/${item.serviceId?._id || ''}`}
+                        className={styles.btnView}
+                      >
+                        Xem chi tiết
+                      </Link>
+                      {invoice.status === 'active' && (
+                        <button
+                          className={styles.btnCancel}
+                          onClick={() => handleCancelService(invoice._id)}
+                        >
+                          Hủy dịch vụ
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -150,4 +164,4 @@ function MyServices() {
   );
 }
 
-export default MyServices; 
+export default MyServices;

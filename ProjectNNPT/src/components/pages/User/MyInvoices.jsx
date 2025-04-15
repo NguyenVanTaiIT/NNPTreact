@@ -19,6 +19,7 @@ function MyInvoices() {
       const response = await getUserInvoices();
       if (response.success) {
         setInvoices(response.data);
+        console.log('Invoices:', response.data);
       } else {
         setError(response.message || 'Không thể lấy danh sách hóa đơn');
         toast.error(response.message || 'Không thể lấy danh sách hóa đơn');
@@ -91,7 +92,7 @@ function MyInvoices() {
                 <div className={styles.invoiceDetails}>
                   <div className={styles.detailItem}>
                     <span>Phòng:</span>
-                    <span>{invoice.bookingId?.roomId?.name || 'N/A'}</span>
+                    <span>{invoice.bookingId?.roomId?.description || 'N/A'}</span>
                   </div>
                   <div className={styles.detailItem}>
                     <span>Ngày tạo:</span>
@@ -105,7 +106,7 @@ function MyInvoices() {
 
                 <div className={styles.invoiceActions}>
                   <Link 
-                    to={`/invoice/${invoice._id}`}
+                    to={`/invoices/${invoice._id}`}
                     className={styles.btnView}
                   >
                     Xem chi tiết

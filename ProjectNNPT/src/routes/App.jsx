@@ -30,8 +30,6 @@ import Hotels from '../components/pages/Admin/Hotels';
 import Floors from '../components/pages/Admin/Floors';
 import AdminLayout from '../components/layouts/AdminLayout';
 import AdminInvoiceDetail from '../components/pages/Admin/InvoiceDetail';
-import ServicesBillList from '../components/pages/Admin/ServicesBills/ServicesBillList';
-import ServicesBillForm from '../components/pages/Admin/ServicesBills/ServicesBillForm';
 
 function App() {
   return (
@@ -162,9 +160,6 @@ function App() {
           <Route path="invoices" element={<Invoices />} />
           <Route path="invoices/:id" element={<AdminInvoiceDetail />} />
           <Route path="services" element={<Services />} />
-          <Route path="servicesbills" element={<ServicesBillList />} />
-          <Route path="servicesbills/create" element={<ServicesBillForm />} />
-          <Route path="servicesbills/edit/:id" element={<ServicesBillForm />} />
         </Route>
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />

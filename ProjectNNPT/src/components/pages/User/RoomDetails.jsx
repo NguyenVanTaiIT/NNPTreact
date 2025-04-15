@@ -92,7 +92,7 @@ function RoomDetails() {
                   Quay Lại
                 </Link>
                 {room.isAvailable && (
-                  <Link to={`/booking/${room._id}`} className={styles.btnPrimary}>
+                  <Link to={`/bookings/${room._id}`} className={styles.btnPrimary}>
                     Đặt Phòng
                   </Link>
                 )}

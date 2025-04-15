@@ -21,7 +21,6 @@ function MyBookings() {
       setLoading(true);
       setError(null);
       
-      console.log('Current user:', user);
       
       if (!user || !user._id) {
         console.error('User not authenticated or missing _id:', user);
@@ -31,12 +30,9 @@ function MyBookings() {
         return;
       }
 
-      console.log('Fetching bookings for user ID:', user._id);
       const response = await getUserBookings();
-      console.log('User bookings response:', response);
       
       if (response.success) {
-        console.log('Bookings data:', response.data);
         setBookings(response.data || []);
 
         // Fetch invoices for each booking
@@ -48,7 +44,6 @@ function MyBookings() {
             }
             return null;
           } catch (err) {
-            console.error('Error fetching invoice:', err);
             return null;
           }
         });
@@ -62,12 +57,10 @@ function MyBookings() {
         });
         setInvoices(invoiceMap);
       } else {
-        console.error('Failed to fetch bookings:', response.message);
         setError(response.message || 'Không thể lấy danh sách đặt phòng');
         toast.error(response.message || 'Không thể lấy danh sách đặt phòng');
       }
     } catch (error) {
-      console.error('Error fetching bookings:', error);
       setError(error.message || 'Không thể lấy danh sách đặt phòng');
       toast.error(error.message || 'Không thể lấy danh sách đặt phòng');
     } finally {
@@ -316,7 +309,7 @@ function MyBookings() {
                         Hủy đặt phòng
                       </button>
                     )}
-                    {booking.status === 'cancelled' && (
+                    {booking.status === 'canceled' && (
                       <button 
                         onClick={() => handleDeleteBooking(booking._id)}
                         className={styles.btnDelete}
@@ -324,13 +317,6 @@ function MyBookings() {
                         Xóa
                       </button>
                     )}
-                    <Link 
-                      to={`/booking/${booking._id}`}
-                      state={{ booking, isViewingBooking: true }}
-                      className={styles.btnView}
-                    >
-                      Xem chi tiết
-                    </Link>
                   </div>
                 </div>
               );

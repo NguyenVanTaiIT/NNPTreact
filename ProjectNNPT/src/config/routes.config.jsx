@@ -13,7 +13,7 @@ export const ROUTES = {
     DASHBOARD: '/dashboard',
     PROFILE: '/profile',
     SETTINGS: '/settings',
-    BOOKING: '/booking/:id',
+    BOOKING: '/bookings/:id',
     BOOKING_SUCCESS: '/booking-success',
     MY_BOOKINGS: '/my-bookings',
     MY_INVOICES: '/my-invoices',
@@ -42,10 +42,7 @@ export const ROUTES = {
         SERVICES: '/admin/services',
         SETTINGS: '/admin/settings',
         HOTELS: '/admin/hotels',
-        FLOORS: '/admin/floors',
-        SERVICES_BILLS: '/admin/servicesbills',
-        SERVICES_BILL_CREATE: '/admin/servicesbills/create',
-        SERVICES_BILL_EDIT: '/admin/servicesbills/edit/:id'
+        FLOORS: '/admin/floors'
     }
 };
 
@@ -53,5 +50,5 @@ export const ROUTES = {
 export const ROUTE_GUARDS = {
     PUBLIC: ['HOME', 'LOGIN', 'REGISTER', 'ROOMS_TARIFF', 'INTRODUCTION', 'GALLERY', 'ROOM_DETAILS', 'ROOM_DETAILS_WITH_ID'],
     PROTECTED: ['DASHBOARD', 'PROFILE', 'SETTINGS', 'ROOMS', 'BOOKINGS', 'BOOKING', 'BOOKING_SUCCESS', 'MY_BOOKINGS', 'MY_INVOICES', 'MY_SERVICES', 'INVOICE_DETAIL', 'SERVICE_DETAIL', 'PAYMENT'],
-    ADMIN: ['ADMIN.DASHBOARD', 'ADMIN.USERS', 'ADMIN.ROOMS', 'ADMIN.BOOKINGS', 'ADMIN.INVOICES', 'ADMIN.SERVICES', 'ADMIN.SETTINGS', 'ADMIN.HOTELS', 'ADMIN.FLOORS', 'ADMIN.SERVICES_BILLS']
-}; 
+    ADMIN: ['ADMIN.DASHBOARD', 'ADMIN.USERS', 'ADMIN.ROOMS', 'ADMIN.BOOKINGS', 'ADMIN.INVOICES', 'ADMIN.SERVICES', 'ADMIN.SETTINGS', 'ADMIN.HOTELS', 'ADMIN.FLOORS']
+};

@@ -138,11 +138,6 @@ const InvoiceDetail = () => {
         <div className={styles.invoiceCard}>
           <div className={styles.invoiceHeader}>
             <h2>Hóa Đơn #{invoice._id.slice(-6)}</h2>
-            <span className={`${styles.status} ${styles[invoice.status]}`}>
-              {invoice.status === 'pending' ? 'Chờ thanh toán' :
-               invoice.status === 'paid' ? 'Đã thanh toán' :
-               'Đã hủy'}
-            </span>
           </div>
 
           <div className={styles.invoiceInfo}>

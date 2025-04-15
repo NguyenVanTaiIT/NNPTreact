@@ -31,7 +31,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
         const floorsData = await getAllFloors();
         setFloors(floorsData);
       } catch (error) {
-        console.error('Error fetching hotels and floors:', error);
+        console.error('Lỗi khi tải danh sách khách sạn và tầng:', error);
       } finally {
         setLoading(false);
       }
@@ -42,7 +42,6 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
 
   useEffect(() => {
     if (room) {
-      console.log('Setting form data from room:', room);
       setFormData({
         name: room.name || '',
         type: room.type || 'Standard',
@@ -53,34 +52,16 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
         hotel: room.hotel?._id || '',
         floor: room.floor?._id || ''
       });
-    } else {
-      console.log('No room provided, using default form data');
     }
   }, [room]);
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Room name is required';
-    }
-    
-    if (!formData.type.trim()) {
-      newErrors.type = 'Room type is required';
-    }
-    
-    if (formData.price < 0) {
-      newErrors.price = 'Price cannot be negative';
-    }
-
-    if (!formData.hotel) {
-      newErrors.hotel = 'Hotel is required';
-    }
-
-    if (!formData.floor) {
-      newErrors.floor = 'Floor is required';
-    }
-
+    if (!formData.name.trim()) newErrors.name = 'Tên phòng không được để trống';
+    if (!formData.type.trim()) newErrors.type = 'Loại phòng không được để trống';
+    if (formData.price < 0) newErrors.price = 'Giá không được âm';
+    if (!formData.hotel) newErrors.hotel = 'Vui lòng chọn khách sạn';
+    if (!formData.floor) newErrors.floor = 'Vui lòng chọn tầng';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,43 +76,31 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted, validating...');
-    
     if (validateForm()) {
-      console.log('Form is valid, preparing submission data');
       setIsSubmitting(true);
-      
       const submissionData = {
         ...formData,
         price: Number(formData.price),
         amenities: formData.amenities.split(',').map(item => item.trim()).filter(Boolean)
       };
-      
-      console.log('Submitting data:', submissionData);
-      console.log('Room object:', room);
-      
       try {
         onSubmit(submissionData);
       } catch (error) {
-        console.error('Error in form submission:', error);
+        console.error('Lỗi khi gửi biểu mẫu:', error);
         setIsSubmitting(false);
       }
-    } else {
-      console.log('Form validation failed:', errors);
     }
   };
 
-  if (loading) {
-    return <div className={styles.loading}>Loading...</div>;
-  }
+  if (loading) return <div className={styles.loading}>Đang tải...</div>;
 
   return (
     <div className={styles.formOverlay}>
       <div className={styles.formContainer}>
-        <h3>{room ? 'Edit Room' : 'Add New Room'}</h3>
+        <h3>{room ? 'Chỉnh sửa phòng' : 'Thêm phòng mới'}</h3>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label>Room Name</label>
+            <label>Tên phòng</label>
             <input
               type="text"
               name="name"
@@ -143,46 +112,46 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Room Type</label>
+            <label>Loại phòng</label>
             <select
               name="type"
               value={formData.type}
               onChange={handleChange}
               className={errors.type ? styles.error : ''}
             >
-              <option value="Standard">Standard</option>
-              <option value="Deluxe">Deluxe</option>
+              <option value="Standard">Tiêu chuẩn</option>
+              <option value="Deluxe">Cao cấp</option>
               <option value="Suite">Suite</option>
-              <option value="Family">Family</option>
-              <option value="Premium">Premium</option>
+              <option value="Family">Gia đình</option>
+              <option value="Premium">Thượng hạng</option>
               <option value="Executive">Executive</option>
             </select>
             {errors.type && <span className={styles.errorText}>{errors.type}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>Price (VND)</label>
+            <label>Giá phòng (VND)</label>
             <input
               type="number"
               name="price"
               value={formData.price}
               onChange={handleChange}
               min="0"
-              step="10000"
+              step="1"
               className={errors.price ? styles.error : ''}
             />
             {errors.price && <span className={styles.errorText}>{errors.price}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>Hotel</label>
+            <label>Khách sạn</label>
             <select
               name="hotel"
               value={formData.hotel}
               onChange={handleChange}
               className={errors.hotel ? styles.error : ''}
             >
-              <option value="">Select a hotel</option>
+              <option value="">Chọn khách sạn</option>
               {hotels.map(hotel => (
                 <option key={hotel._id} value={hotel._id}>
                   {hotel.name}
@@ -193,14 +162,14 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Floor</label>
+            <label>Tầng</label>
             <select
               name="floor"
               value={formData.floor}
               onChange={handleChange}
               className={errors.floor ? styles.error : ''}
             >
-              <option value="">Select a floor</option>
+              <option value="">Chọn tầng</option>
               {floors.map(floor => (
                 <option key={floor._id} value={floor._id}>
                   {floor.name}
@@ -211,7 +180,7 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Description</label>
+            <label>Mô tả</label>
             <textarea
               name="description"
               value={formData.description}
@@ -221,13 +190,13 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Amenities (comma-separated)</label>
+            <label>Tiện nghi (phân cách bằng dấu phẩy)</label>
             <textarea
               name="amenities"
               value={formData.amenities}
               onChange={handleChange}
               rows="2"
-              placeholder="TV, Air Conditioning, Mini Bar, etc."
+              placeholder="TV, Máy lạnh, Mini Bar, v.v."
             />
           </div>
 
@@ -239,16 +208,16 @@ const RoomForm = ({ room, onSubmit, onCancel }) => {
                 checked={formData.isAvailable}
                 onChange={handleChange}
               />
-              Room is available
+              Phòng còn trống
             </label>
           </div>
 
           <div className={styles.formActions}>
             <Button type="button" variant="secondary" onClick={onCancel}>
-              Cancel
+              Hủy
             </Button>
             <Button type="submit" variant="primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : (room ? 'Update Room' : 'Create Room')}
+              {isSubmitting ? 'Đang gửi...' : (room ? 'Cập nhật phòng' : 'Tạo phòng')}
             </Button>
           </div>
         </form>

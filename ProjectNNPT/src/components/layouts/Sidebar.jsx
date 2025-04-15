@@ -28,7 +28,7 @@ const Sidebar = () => {
               className={({ isActive }) => isActive ? styles.active : ''}
               end
             >
-              Dashboard
+              Trang quản trị
             </NavLink>
           </li>
           <li>
@@ -36,7 +36,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.HOTELS} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Hotel Management
+              Quản lý khách sạn
             </NavLink>
           </li>
           <li>
@@ -44,7 +44,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.FLOORS} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Floor Management
+              Quản lý tầng
             </NavLink>
           </li>
           <li>
@@ -52,7 +52,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.ROOMS} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Room Management
+              Quản lý phòng
             </NavLink>
           </li>
           <li>
@@ -60,7 +60,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.USERS} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              User Management
+              Quản lý người dùng
             </NavLink>
           </li>
           <li>
@@ -68,7 +68,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.BOOKINGS} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Booking Management
+              Quản lý đặt phòng
             </NavLink>
           </li>
           <li>
@@ -76,7 +76,7 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.INVOICES} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Invoice Management
+              Quản lý hóa đơn
             </NavLink>
           </li>
           <li>
@@ -84,22 +84,14 @@ const Sidebar = () => {
               to={ROUTES.ADMIN.SERVICES} 
               className={({ isActive }) => isActive ? styles.active : ''}
             >
-              Service Management
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to={ROUTES.ADMIN.SERVICES_BILLS} 
-              className={({ isActive }) => isActive ? styles.active : ''}
-            >
-              Service Bills
+              Quản lý dịch vụ
             </NavLink>
           </li>
         </ul>
       </nav>
       <div className={styles.logout}>
         <button onClick={handleLogout} className={styles.logoutButton}>
-          Logout
+          Đăng xuất
         </button>
       </div>
     </div>

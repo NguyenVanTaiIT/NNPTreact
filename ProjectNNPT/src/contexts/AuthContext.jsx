@@ -20,41 +20,33 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         const userData = localStorage.getItem('user');
         
-        console.log('Checking auth status - Token:', token ? 'exists' : 'missing');
-        console.log('Checking auth status - User data:', userData);
         
         if (token && userData && userData !== 'undefined' && userData !== 'null') {
           try {
             const parsedUser = JSON.parse(userData);
-            console.log('Parsed user data:', parsedUser);
             
             // Kiểm tra xem user object có đầy đủ thông tin không
             if (parsedUser && parsedUser._id) {
               setUser(parsedUser);
-              console.log('User authenticated:', parsedUser._id);
             } else {
-              console.error('Invalid user data structure:', parsedUser);
               // Clear invalid data
               localStorage.removeItem('token');
               localStorage.removeItem('user');
               localStorage.removeItem('userRole');
             }
           } catch (parseError) {
-            console.error('Error parsing user data:', parseError);
             // Clear invalid data
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('userRole');
           }
         } else {
-          console.log('No valid auth data found');
           // Clear invalid data
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           localStorage.removeItem('userRole');
         }
       } catch (error) {
-        console.error('Error checking auth status:', error);
         // Xóa dữ liệu không hợp lệ
         localStorage.removeItem('token');
         localStorage.removeItem('user');

@@ -19,9 +19,6 @@ const AdminRoute = ({ children }) => {
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 const userRole = localStorage.getItem('userRole');
                 
-                console.log('AdminRoute - user:', user);
-                console.log('AdminRoute - userRole:', userRole);
-                
                 if (!token || !user) {
                     setIsAdmin(false);
                     return;

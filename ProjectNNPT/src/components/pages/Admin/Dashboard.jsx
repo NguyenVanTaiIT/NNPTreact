@@ -6,7 +6,7 @@ import ErrorMessage from '../../utils/ErrorMessage';
 import { getRoomStats } from '../../../services/roomService';
 import { getUserStats } from '../../../services/userService';
 
-const Dashboard = ({ title = 'Dashboard' }) => {
+const Dashboard = ({ title = 'Trang quản trị' }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,29 +17,27 @@ const Dashboard = ({ title = 'Dashboard' }) => {
         setLoading(true);
         setError(null);
         
-        console.log('Fetching dashboard stats...');
+        console.log('Đang tải thống kê trang quản trị...');
         
-        // Lấy thống kê từ database
         const [roomStats, userStats] = await Promise.all([
           getRoomStats(),
           getUserStats()
         ]);
         
-        console.log('Room stats in Dashboard:', roomStats);
-        console.log('User stats in Dashboard:', userStats);
+        console.log('Thống kê phòng:', roomStats);
+        console.log('Thống kê người dùng:', userStats);
         
-        // Kết hợp dữ liệu thống kê
         const combinedStats = {
           totalRooms: roomStats.totalRooms || 0,
           availableRooms: roomStats.availableRooms || 0,
           totalUsers: userStats.totalUsers || 0
         };
         
-        console.log('Combined stats:', combinedStats);
+        console.log('Tổng hợp thống kê:', combinedStats);
         setStats(combinedStats);
       } catch (err) {
-        console.error('Error fetching dashboard stats:', err);
-        setError(err.message || 'Failed to load dashboard statistics');
+        console.error('Lỗi khi tải thống kê:', err);
+        setError(err.message || 'Không thể tải thống kê');
       } finally {
         setLoading(false);
       }
@@ -48,14 +46,13 @@ const Dashboard = ({ title = 'Dashboard' }) => {
     fetchStats();
   }, []);
 
-  // Hiển thị dữ liệu mẫu nếu không có dữ liệu thực
   const displayStats = stats || {
     totalRooms: 0,
     availableRooms: 0,
     totalUsers: 0
   };
 
-  console.log('Display stats:', displayStats);
+  console.log('Thống kê hiển thị:', displayStats);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -65,15 +62,15 @@ const Dashboard = ({ title = 'Dashboard' }) => {
       <h1>{title}</h1>
       <div className={styles.cards}>
         <div className={styles.card}>
-          <h3>Total Rooms</h3>
+          <h3>Tổng số phòng</h3>
           <p>{displayStats.totalRooms}</p>
         </div>
         <div className={styles.card}>
-          <h3>Available Rooms</h3>
+          <h3>Phòng còn trống</h3>
           <p>{displayStats.availableRooms}</p>
         </div>
         <div className={styles.card}>
-          <h3>Total Users</h3>
+          <h3>Tổng số người dùng</h3>
           <p>{displayStats.totalUsers}</p>
         </div>
       </div>

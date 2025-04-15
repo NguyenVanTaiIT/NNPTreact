@@ -28,12 +28,6 @@ function BookingForm() {
   const [invoice, setInvoice] = useState(null);
   const location = useLocation();
 
-  console.log('Booking ID from URL:', id);
-  console.log('Booking ID type:', typeof id);
-  console.log('Location state:', location.state);
-  console.log('Current user:', user);
-  console.log('Available booking IDs: 67f423d6735c3e070e2d50fe, 67f43dcf55798e0b923cd764');
-
   // Fetch all available services
   useEffect(() => {
     const fetchServices = async () => {
@@ -59,7 +53,6 @@ function BookingForm() {
             });
           
           setServices(Array.from(servicesMap.values()));
-          console.log('Available services:', Array.from(servicesMap.values()));
         }
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -117,8 +110,6 @@ function BookingForm() {
         const isViewingExisting = location.state?.isViewingBooking || false;
         
         if (!isViewingExisting) {
-          // Đây là trường hợp tạo booking mới, id là roomId
-          console.log('Creating new booking for room:', id);
           const roomResponse = await getRoomById(id);
           
           if (!roomResponse) {
@@ -126,9 +117,6 @@ function BookingForm() {
             toast.error('Không tìm thấy thông tin phòng');
             return;
           }
-
-          // Kiểm tra trạng thái phòng
-          console.log('Room availability:', roomResponse.isAvailable);
           if (!roomResponse.isAvailable) {
             setError('Phòng này hiện không khả dụng');
             toast.error('Phòng này hiện không khả dụng');
@@ -196,10 +184,6 @@ function BookingForm() {
   }, [id, user, location]);
 
   useEffect(() => {
-    console.log('room changed:', room);
-    console.log('isBooked changed:', isBooked);
-    console.log('bookingData changed:', bookingData);
-    console.log('isAuthorized changed:', isAuthorized);
     
     // Nếu đã có bookingData nhưng room vẫn là null, thử lấy lại dữ liệu phòng
     if (bookingData && !room) {
@@ -311,7 +295,10 @@ function BookingForm() {
     }
 
     try {
-      // Create booking with total price including services
+      if (!room || !user) {
+        throw new Error('Room or user information is missing.');
+      }
+
       const bookingRequest = {
         roomId: room._id,
         checkInDate: new Date().toISOString().split('T')[0],
@@ -319,9 +306,10 @@ function BookingForm() {
         totalPrice: totalPrice
       };
 
-      console.log('Sending booking data:', bookingRequest);
+      console.log('Booking Request:', bookingRequest); // Log the request
+
       const bookingResponse = await createBooking(bookingRequest);
-      console.log('Booking response:', bookingResponse);
+      console.log('Booking Response:', bookingResponse); // Log the response
       
       if (!bookingResponse || !bookingResponse.success) {
         throw new Error(bookingResponse?.message || 'Không thể tạo đặt phòng. Vui lòng thử lại.');
@@ -349,7 +337,7 @@ function BookingForm() {
       const invoiceItems = [
         // Booking service
         {
-          serviceId: "67f40fa8d015835f87d8521e",
+          serviceId: "67f49182a3adee2b7c6dd4ab",
           description: `Đặt phòng ${room.name}`,
           quantity: 1,
           unitPrice: room.price,
@@ -457,10 +445,6 @@ function BookingForm() {
       <Header />
       <div className={styles.container}>
         <h2>Xác Nhận Đặt Phòng</h2>
-        {console.log('Rendering with room:', room)}
-        {console.log('Rendering with isBooked:', isBooked)}
-        {console.log('Rendering with bookingData:', bookingData)}
-        {console.log('Rendering with isAuthorized:', isAuthorized)}
         {room && (
           <div className={styles.bookingForm}>
             {isBooked ? (

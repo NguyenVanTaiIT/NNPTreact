@@ -39,19 +39,15 @@ export const setupAxiosInterceptors = (navigate) => {
   api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('token');
-      console.log('Request interceptor - URL:', config.url);
-      console.log('Request interceptor - Token available:', !!token);
       
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log('Request interceptor - Added token to headers');
       } else {
         console.log('Request interceptor - No token available');
       }
       return config;
     },
     (error) => {
-      console.error('Request interceptor error:', error);
       return Promise.reject(error);
     }
   );
@@ -62,13 +58,9 @@ export const setupAxiosInterceptors = (navigate) => {
       return response;
     },
     async (error) => {
-      console.error('Response interceptor error:', error);
-      console.error('Response error status:', error.response?.status);
-      console.error('Response error data:', error.response?.data);
       
       // Handle 401 Unauthorized errors
       if (error.response?.status === 401) {
-        console.error('Authentication error - redirecting to login');
         // Clear token and redirect to login
         localStorage.removeItem('token');
         localStorage.removeItem('user');

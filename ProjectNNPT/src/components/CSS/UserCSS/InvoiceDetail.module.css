@@ -1,134 +1,158 @@
-.invoiceView {
-  max-width: 1000px;
+.container {
+  max-width: 960px;
   margin: 2rem auto;
   padding: 2rem;
-  background: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
+/* Header */
 .invoiceHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  border-bottom: 2px solid #f0f0f0;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #eee;
+  margin-bottom: 1.5rem;
 }
 
-.invoiceHeader h1 {
+.invoiceHeader h2 {
   margin: 0;
-  color: #333;
+  color: #222;
+  font-size: 1.6rem;
 }
 
-.invoiceStatus {
-  font-size: 1.1rem;
-}
-
+/* Trạng thái */
 .status {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 .pending {
-  background: #fff3cd;
+  background-color: #fff3cd;
   color: #856404;
 }
 
-.completed {
-  background: #d4edda;
+.paid {
+  background-color: #d4edda;
   color: #155724;
 }
 
 .cancelled {
-  background: #f8d7da;
+  background-color: #f8d7da;
   color: #721c24;
 }
 
+/* Thông tin hóa đơn */
 .invoiceInfo {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
-.customerInfo, .bookingInfo {
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 4px;
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  color: #444;
+  border-bottom: 1px dashed #ddd;
+  font-size: 0.95rem;
 }
 
-.customerInfo h2, .bookingInfo h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.2rem;
-}
-
-.customerInfo p, .bookingInfo p {
-  margin: 0.5rem 0;
-  color: #666;
-}
-
-.invoiceDetails {
-  margin-top: 2rem;
-}
-
-.invoiceDetails h2 {
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.invoiceDetails table {
-  width: 100%;
-  border-collapse: collapse;
+/* Danh sách dịch vụ */
+.itemsList {
   margin-top: 1rem;
 }
 
-.invoiceDetails th,
-.invoiceDetails td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.invoiceDetails th {
-  background: #f8f9fa;
-  font-weight: 600;
+.itemsList h3 {
   color: #333;
-}
-
-.invoiceDetails tbody tr:hover {
-  background: #f8f9fa;
-}
-
-.invoiceDetails tfoot tr {
-  font-weight: 500;
-}
-
-.invoiceDetails tfoot tr.total {
-  font-weight: 600;
-  font-size: 1.1rem;
-  background: #f8f9fa;
-}
-
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
+  margin-bottom: 1rem;
   font-size: 1.2rem;
 }
 
-.error {
-  color: #dc3545;
+.itemRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-@media (max-width: 768px) {
-  .invoiceView {
-    margin: 1rem;
-    padding: 1rem;
-  }
+/* Tổng tiền */
+.invoiceTotal {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
 
+.totalRow {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Nút thao tác */
+.invoiceActions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btnBack,
+.btnPay {
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btnBack {
+  background-color: #f0f0f0;
+  color: #444;
+}
+
+.btnBack:hover {
+  background-color: #e0e0e0;
+}
+
+.btnPay {
+  background-color: #007bff;
+  color: white;
+}
+
+.btnPay:hover {
+  background-color: #0069d9;
+}
+
+/* Loading & Error */
+.loadingContainer,
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.errorContainer p {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .invoiceInfo {
     grid-template-columns: 1fr;
   }
@@ -136,11 +160,21 @@
   .invoiceHeader {
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
-  .invoiceDetails table {
-    display: block;
-    overflow-x: auto;
+  .itemRow {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.5rem;
   }
-} 
+
+  .invoiceActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}

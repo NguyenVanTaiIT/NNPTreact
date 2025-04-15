@@ -63,17 +63,12 @@ export const getRoomStats = async () => {
  */
 export const getRoomById = async (id) => {
   try {
-    console.log('Fetching room with ID:', id);
     const response = await api.get(`/rooms/${id}`);
-    console.log('Room response:', response.data);
     
     if (response.data && response.data.success) {
-      console.log('Room data:', response.data.data);
-      console.log('Room availability:', response.data.data.isAvailable);
       return response.data.data;
     }
     
-    console.error('Invalid response format from server:', response.data);
     throw new Error('Invalid response format from server');
   } catch (error) {
     console.error(`Error fetching room with ID ${id}:`, error);

@@ -9,34 +9,32 @@ const UserList = ({ users, roles = [], onDelete, onEdit, onCreate }) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleEdit = (user) => {
-    console.log('UserList - Editing user:', user);
+    console.log('UserList - Đang chỉnh sửa người dùng:', user);
     setSelectedUser(user);
     setShowForm(true);
   };
 
   const handleFormSubmit = (formData) => {
-    console.log('UserList - Form submitted with data:', formData);
+    console.log('UserList - Dữ liệu được gửi từ form:', formData);
     if (selectedUser) {
-      // Pass the form data to the parent component
       onEdit(formData);
     }
     setShowForm(false);
   };
 
   const getRoleName = (role) => {
-    if (!role) return 'No Role';
+    if (!role) return 'Không có vai trò';
     if (typeof role === 'string') {
-      // Try to find the role name from the roles array
       const foundRole = roles.find(r => r._id === role);
       return foundRole ? foundRole.roleName : role;
     }
-    return role.roleName || 'Unknown Role';
+    return role.roleName || 'Không xác định';
   };
 
   return (
     <div className={styles.userList}>
       <div className={styles.header}>
-        <h2>User Management</h2>
+        <h2>Quản lý người dùng</h2>
       </div>
 
       {showForm && (
@@ -48,7 +46,7 @@ const UserList = ({ users, roles = [], onDelete, onEdit, onCreate }) => {
         />
       )}
 
-      <Table headers={['Username', 'Email', 'Full Name', 'Role', 'Status', 'Actions']}>
+      <Table headers={['Tên đăng nhập', 'Email', 'Họ tên', 'Vai trò', 'Trạng thái', 'Thao tác']}>
         {users.map((user) => (
           <tr key={user._id}>
             <td>{user.username}</td>
@@ -61,13 +59,13 @@ const UserList = ({ users, roles = [], onDelete, onEdit, onCreate }) => {
             </td>
             <td>
               <span className={`${styles.status} ${user.status ? styles.active : styles.inactive}`}>
-                {user.status ? 'Active' : 'Inactive'}
+                {user.status ? 'Hoạt động' : 'Không hoạt động'}
               </span>
             </td>
             <td>
-              <Button onClick={() => handleEdit(user)}>Edit</Button>
+              <Button onClick={() => handleEdit(user)}>Chỉnh sửa</Button>
               <Button variant="danger" onClick={() => onDelete(user._id)}>
-                Delete
+                Xóa
               </Button>
             </td>
           </tr>

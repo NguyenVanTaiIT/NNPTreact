@@ -1,4 +1,5 @@
 import api from './api';
+import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';
 
@@ -47,23 +48,31 @@ export const updateBookingStatus = async (bookingId, status) => {
 
 /**
  * Tạo đặt phòng mới
- * @param {Object} bookingData - Dữ liệu đặt phòng
+ * @param {Object} bookingRequest - Dữ liệu đặt phòng
  * @returns {Promise<Object>} - Đặt phòng đã tạo
  */
-export const createBooking = async (bookingData) => {
+export const createBooking = async (bookingRequest) => {
   try {
-    console.log('Creating new booking:', bookingData);
-    const response = await api.post('/bookings', bookingData);
-    console.log('Create booking response:', response);
+    console.log('Creating booking with request:', bookingRequest);
+
+    const response = await axios.post('http://localhost:3000/bookings', bookingRequest,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
     
-    if (!response.data) {
-      throw new Error('Không nhận được phản hồi từ server');
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed to create booking');
     }
-    
+
     return response.data;
   } catch (error) {
     console.error('Error in createBooking:', error);
-    throw error.response?.data || error;
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+    }
+    throw error;
   }
 };
 
@@ -119,33 +128,29 @@ export const getBookingById = async (id) => {
 
 export const getUserBookings = async () => {
   try {
-    console.log('Fetching user bookings...');
     const token = localStorage.getItem('token');
-    console.log('Token available:', !!token);
     
-    const response = await api.get('/bookings/user');
-    console.log('User bookings response:', response);
+    const response = await api.get('/bookings/user',{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
     
     if (response.data && response.data.success) {
-      console.log('Bookings data:', response.data.data);
       return {
         success: true,
         data: response.data.data || []
       };
     } else {
-      console.error('Failed to fetch bookings:', response.data?.message);
       return {
         success: false,
         message: response.data?.message || 'Không thể lấy danh sách đặt phòng'
       };
     }
   } catch (error) {
-    console.error('Error in getUserBookings:', error);
-    console.error('Error details:', error.response?.data);
     
     // Kiểm tra lỗi xác thực
     if (error.response?.status === 401) {
-      console.error('Authentication error - token may be invalid or expired');
       return {
         success: false,
         message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
