@@ -11,49 +11,33 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Cài đặt interceptors cho axios
     setupAxiosInterceptors(navigate);
 
-    // Kiểm tra trạng thái đăng nhập khi component mount
-    const checkAuthStatus = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const userData = localStorage.getItem('user');
-        
-        
-        if (token && userData && userData !== 'undefined' && userData !== 'null') {
-          try {
-            const parsedUser = JSON.parse(userData);
-            
-            // Kiểm tra xem user object có đầy đủ thông tin không
-            if (parsedUser && parsedUser._id) {
-              setUser(parsedUser);
-            } else {
-              // Clear invalid data
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
-              localStorage.removeItem('userRole');
-            }
-          } catch (parseError) {
-            // Clear invalid data
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('userRole');
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+
+      if (token && userData) {
+        try {
+          const parsedUser = JSON.parse(userData);
+          if (parsedUser && parsedUser._id) {
+            setUser(parsedUser);
+          } else {
+            clearAuthData();
           }
-        } else {
-          // Clear invalid data
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          localStorage.removeItem('userRole');
+        } catch (error) {
+          clearAuthData();
         }
-      } catch (error) {
-        // Xóa dữ liệu không hợp lệ
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('userRole');
-      } finally {
-        setLoading(false);
+      } else {
+        clearAuthData();
       }
+      setLoading(false);
+    };
+
+    const clearAuthData = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userRole');
     };
 
     checkAuthStatus();
@@ -62,32 +46,21 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async (credentials) => {
     try {
       const response = await loginService(credentials);
-      
-      // Kiểm tra response có đúng định dạng không
       if (!response || !response.token || !response.user) {
         throw new Error('Invalid response format from server');
       }
-      
-      console.log('Login response:', response);
-      
-      // Normalize role name to 'Admin' with capital A
-      let roleName = '';
-      if (response.user.role) {
-        if (typeof response.user.role === 'object' && response.user.role.roleName) {
-          // Ensure proper case for Admin role
-          roleName = response.user.role.roleName.toLowerCase() === 'admin' ? 'Admin' : response.user.role.roleName;
-        } else if (typeof response.user.role === 'string') {
-          // Ensure proper case for Admin role
-          roleName = response.user.role.toLowerCase() === 'admin' ? 'Admin' : response.user.role;
-        }
-      }
-      
-      // Store normalized data
+
+      const user = response.user;
+      const role = user.role 
+        ? (typeof user.role === 'string' ? user.role : user.role.roleName) 
+        : '';
+      const normalizedRole = role.toLowerCase() === 'admin' ? 'Admin' : role;
+
       localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
-      localStorage.setItem('userRole', roleName);
-      
-      setUser(response.user);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('userRole', normalizedRole);
+
+      setUser(user);
       return response;
     } catch (error) {
       console.error('Login error:', error);
@@ -96,8 +69,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleUpdateUser = (updatedUser) => {
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    try {
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
   };
 
   const handleLogout = async () => {
@@ -106,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      // Xóa dữ liệu đăng nhập
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('userRole');
@@ -138,4 +114,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};
